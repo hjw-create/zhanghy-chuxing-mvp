@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>出行时段路线天气建议 · 张函扬</title>
+<meta name="description" content="学生/上班族：按自己的出门时段与路线写三句行动（带伞/改点/备外套）+ 回来补实际干湿。基于公开气象资料参考；不做官方预警、不卖硬件。"/>
+<style>
+:root{--ink:#1c3328;--muted:#5a6d62;--line:#cfe0d6;--bg:#eef6f1;--card:#fbfefb;--accent:#2f6b52;--accent2:#5a9a6a;--warn:#9a6b20}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);line-height:1.65;background:radial-gradient(900px 420px at 10% -10%,#cfe8d8,transparent 55%),radial-gradient(700px 360px at 100% 0,#dcefd8,transparent 48%),var(--bg)}
+.top{position:sticky;top:0;z-index:10;background:rgba(238,246,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{max-width:900px;margin:0 auto;padding:10px 16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.brand{font-weight:800}.nav a{margin-left:6px;text-decoration:none;color:var(--ink);font-size:13px;padding:6px 10px;border-radius:999px}
+.nav a:hover{background:#fff;border:1px solid var(--line)}
+.wrap{max-width:900px;margin:0 auto;padding:18px 16px 56px}
+.kicker{display:inline-block;font-size:12px;font-weight:700;color:var(--accent);background:#e3f0e8;border:1px solid #b9d6c0;border-radius:999px;padding:4px 10px;margin-bottom:10px}
+h1{margin:0 0 10px;font-size:clamp(28px,5vw,40px);line-height:1.2}
+.lead{color:var(--muted);font-size:17px;max-width:42em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{font-size:12px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{appearance:none;border:0;cursor:pointer;font:inherit;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px}
+.btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}.btn-g{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn-block{width:100%}
+.warn{margin:16px 0;padding:14px 16px;border-radius:14px;background:#fff8ee;border:1px solid #efd3a8;border-left:6px solid var(--warn)}
+.warn h2{margin:0 0 6px;font-size:16px;color:var(--warn)}
+.grid{display:grid;gap:12px}@media(min-width:760px){.g2{grid-template-columns:1.05fr .95fr}.g3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(28,51,40,.05)}
+.card h2{margin:0 0 8px;font-size:18px}.card p,.card li{color:var(--muted)}
+.risk{padding:12px;border-radius:14px;background:#fff;border:1px dashed var(--line);text-align:center}
+.risk b{display:block;font-size:18px;color:var(--accent);margin-bottom:4px}
+.q{margin:0 0 10px;padding:10px 12px;background:#e3f0e8;border-left:3px solid var(--accent);border-radius:0 10px 10px 0}
+.q cite{display:block;margin-top:4px;font-style:normal;font-size:12px;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{position:relative;padding:10px 10px 10px 46px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;background:#fff}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:10px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+label.ck{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin:0 0 8px;background:#fff;cursor:pointer}
+label.ck input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent)}
+.field{margin:0 0 10px}.field>span{display:block;font-size:13px;font-weight:700;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff}
+.field textarea{min-height:70px;resize:vertical}
+.row2{display:grid;gap:10px}@media(min-width:560px){.row2{grid-template-columns:1fr 1fr}}
+.bar{height:8px;background:#d7e8de;border-radius:999px;overflow:hidden;margin:6px 0 8px}.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5a9a6a,var(--accent))}
+.msg{min-height:1.3em;font-weight:700}.ok{color:#0b6b4a}.err{color:#8b2e1a}
+.item{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;font-size:13px;background:#fff}.item b{display:block}
+.sec{margin-top:16px}footer{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in"><div class="brand">出行窗口 · 三句行动</div><nav class="nav"><a href="#node">出门窗口</a><a href="#obs">实际干湿</a><a href="#book">预约试填</a><a href="#hist">本机记录</a></nav></div></header>
+<main class="wrap">
+<section>
+  <div class="kicker">沈阳农业大学 · 应用气象学 · 课程 MVP</div>
+  <h1>按你的出门窗口，写清三句行动</h1>
+  <p class="lead">给有<strong>通勤 / 校园→近郊短途</strong>的学生和上班族：城市预报太笼统时，先按自己的时段和路线勾出门窗口，写出<strong>带伞、改时段、备薄外套</strong>三句；回来再补一句实际干湿。本页不做官方预警，不卖手环传感器。</p>
+  <div class="chips"><span class="chip">张函扬 · 2024111002</span><span class="chip">出行时段路线天气建议单</span><span class="chip">公开资料参考 · 非官方预警</span></div>
+  <div class="cta"><a class="btn btn-p" href="#node">勾出门窗口五项</a><a class="btn btn-g" href="#obs">补实际干湿</a></div>
+</section>
+<section class="warn">
+  <h2>边界三句</h2>
+  <ul>
+    <li>只做贴合自己出行时段与路线的简易建议单 + 回来后干湿留痕。</li>
+    <li>不做官方预警、不覆盖野外高危线路、不卖硬件与传感器。</li>
+    <li>记录只存在这台设备浏览器里；权威预警仍看气象台发布。</li>
+  </ul>
+</section>
+<section class="sec grid g3">
+  <div class="risk"><b>带伞</b><span style="color:var(--muted);font-size:13px">出门那一小时要不要伞</span></div>
+  <div class="risk"><b>改时段</b><span style="color:var(--muted);font-size:13px">上午走还是错开敏感窗</span></div>
+  <div class="risk"><b>备外套</b><span style="color:var(--muted);font-size:13px">薄外套够不够，不堆术语</span></div>
+</section>
+<section class="sec grid g2">
+  <article class="card">
+    <h2>要对上的三件事（访谈原声口径）</h2>
+    <blockquote class="q">App写多云转阴，下午两点出门三点半就下起来了，攻略全泡汤。<cite>FT-01 · 同校短途出游</cite></blockquote>
+    <blockquote class="q">小时预报写有雨概率40%，我以为能撑，出地铁就淋湿了。建议别超过三句话。<cite>FT-02 · 通勤上班族</cite></blockquote>
+    <blockquote class="q">别跟我讲锋面和水汽，告诉我上午去还是下午去更稳；也别推销传感器。<cite>FT-03 · 近郊一日游同学</cite></blockquote>
+  </article>
+  <article class="card">
+    <h2>三步</h2>
+    <ol class="steps">
+      <li>写下出发时段与路线起止，勾完出门窗口五项。</li>
+      <li>出门前只保留三句行动：带伞 / 改时段 / 备薄外套。</li>
+      <li>回来补一句实际干湿；愿试填就留手机。高危线路另看官方渠道。</li>
+    </ol>
+  </article>
+</section>
+<section class="sec card" id="node">
+  <h2>出门窗口 · 五项勾选</h2>
+  <p>五项都看过才能保存。目标：一分钟内能决定「这段路、这个时段」怎么行动。</p>
+  <div class="bar"><i id="bar"></i></div>
+  <p id="barText" style="margin:0 0 10px;font-size:13px;color:var(--muted)">已看 0 / 5</p>
+  <form id="nodeForm">
+    <label class="ck"><input type="checkbox" name="c1"/> 已写下出发时段窗口（例如 14:00–18:00）</label>
+    <label class="ck"><input type="checkbox" name="c2"/> 已写下路线起止（校园→近郊 / 地铁口→公司等）</label>
+    <label class="ck"><input type="checkbox" name="c3"/> 已对照公开城市预报原句，收成三句行动草稿</label>
+    <label class="ck"><input type="checkbox" name="c4"/> 三句行动不超过「带伞 / 改时段 / 备外套」</label>
+    <label class="ck"><input type="checkbox" name="c5"/> 边界自检：本页不是官方预警、不卖硬件、不覆盖野外高危</label>
+    <div class="row2">
+      <label class="field"><span>出发时段窗口</span><input name="window" placeholder="例如：周六 14:00–18:00"/></label>
+      <label class="field"><span>路线起止</span><input name="route" placeholder="例如：校园东门→近郊公园"/></label>
+    </div>
+    <div class="row2">
+      <label class="field"><span>填写人</span><input name="who" placeholder="本人 / 同伴"/></label>
+      <label class="field"><span>出行日期</span><input type="date" name="day"/></label>
+    </div>
+    <button class="btn btn-p btn-block" type="submit">保存出门窗口到本机</button>
+    <p class="msg" id="nodeMsg"></p>
+  </form>
+</section>
+<section class="sec card" id="obs">
+  <h2>回来后 · 实际干湿留痕</h2>
+  <p>用人话档位，不写概率术语。方便下次出门对照。</p>
+  <form id="obsForm">
+    <div class="row2">
+      <label class="field"><span>实际出行时段</span><input name="when" placeholder="例如：15:10–17:40" required/></label>
+      <label class="field"><span>路线</span><input name="route" placeholder="与出门前一致或写变更" required/></label>
+    </div>
+    <div class="row2">
+      <label class="field"><span>实际干湿</span>
+        <select name="see" required>
+          <option value="">请选择</option>
+          <option>全程基本干</option>
+          <option>中途湿了（步行/等车）</option>
+          <option>全程较湿</option>
+          <option>改时段后避开了</option>
+        </select>
+      </label>
+      <label class="field"><span>当时行动</span>
+        <select name="act" required>
+          <option value="">请选择</option>
+          <option>带伞了</option>
+          <option>改出门时间</option>
+          <option>加了薄外套</option>
+          <option>没改仍挨淋</option>
+        </select>
+      </label>
+    </div>
+    <label class="field"><span>一句备注（可选）</span><textarea name="note" placeholder="例如：三点半公园段开始下，攻略泡了"></textarea></label>
+    <button class="btn btn-p btn-block" type="submit">保存实际干湿到本机</button>
+    <p class="msg" id="obsMsg"></p>
+  </form>
+</section>
+<section class="sec card" id="book">
+  <h2>预约两周试填</h2>
+  <p>先免费试用两次出门。同学群点赞不算样本。</p>
+  <form id="bookForm">
+    <div class="row2">
+      <label class="field"><span>称呼</span><input name="name" required placeholder="怎么称呼你"/></label>
+      <label class="field"><span>11位手机</span><input name="phone" required pattern="1[3-9]\d{9}" placeholder="用于回访试填，不公开"/></label>
+    </div>
+    <label class="field"><span>最想搞清什么</span><textarea name="wish" placeholder="例如：通勤那一小时到底带不带伞"></textarea></label>
+    <button class="btn btn-p btn-block" type="submit">留下预约</button>
+    <p class="msg" id="bookMsg"></p>
+  </form>
+</section>
+<section class="sec card" id="hist">
+  <h2>本机记录</h2>
+  <div id="list"></div>
+  <button class="btn btn-g" type="button" id="clear">清空本机记录</button>
+</section>
+<footer>
+  张函扬 · 学号 2024111002 · 电话 13304014148 · Z组 · 个人OPC<br/>
+  公网：https://hjw-create.github.io/zhanghy-chuxing-mvp/ · 只做出行参考，不做官方预警、不卖硬件
+</footer>
+</main>
+
+<script>
+(function(){
+  var KEY='zhanghy_chuxing_v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}}
+  function save(list){localStorage.setItem(KEY,JSON.stringify(list.slice(0,40)));render()}
+  function stamp(){var d=new Date(),p=function(n){return n<10?'0'+n:''+n};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())}
+  function render(){var list=load(),box=document.getElementById('list');if(!list.length){box.innerHTML="<p style='color:var(--muted);font-size:13px'>还没有记录。先勾出门窗口五项或补一句回来后实际干湿。</p>";return}box.innerHTML=list.map(function(r){return "<div class='item'><b>"+r.type+" · "+r.at+"</b>"+r.summary+"</div>"}).join('')}
+  function bar(){var boxes=document.querySelectorAll('#nodeForm input[type=checkbox]');var n=0;boxes.forEach(function(b){if(b.checked)n++});document.getElementById('bar').style.width=(n/boxes.length*100)+'%';document.getElementById('barText').textContent='已看 '+n+' / '+boxes.length}
+  document.querySelectorAll('#nodeForm input[type=checkbox]').forEach(function(b){b.addEventListener('change',bar)});bar();
+  document.getElementById('nodeForm').onsubmit=function(e){e.preventDefault();var fd=new FormData(e.target);var n=['c1','c2','c3','c4','c5'].filter(function(k){return fd.get(k)}).length;var msg=document.getElementById('nodeMsg');if(n<5){msg.className='msg err';msg.textContent='五项都看过再保存。';return}var list=load();list.unshift({type:'出门窗口',at:stamp(),summary:'窗口：'+fd.get('window')+'；路线：'+(fd.get('route')||'未填')+'；日期：'+(fd.get('day')||'未填')+'；填写人：'+(fd.get('who')||'未填')});save(list);msg.className='msg ok';msg.textContent='出门窗口已保存在本机。本页不是官方预警。';};
+  document.getElementById('obsForm').onsubmit=function(e){e.preventDefault();var fd=new FormData(e.target);var list=load();list.unshift({type:'实际干湿',at:stamp(),summary:'时段：'+fd.get('when')+'；路线：'+fd.get('route')+'；结果：'+fd.get('see')+'；行动：'+fd.get('act')+'；备注：'+((fd.get('note')||'无').toString().trim()||'无')});save(list);document.getElementById('obsMsg').className='msg ok';document.getElementById('obsMsg').textContent='已保存。高危线路请另看官方渠道。';};
+  document.getElementById('bookForm').onsubmit=function(e){e.preventDefault();var fd=new FormData(e.target);var phone=(fd.get('phone')||'').toString();var msg=document.getElementById('bookMsg');if(!/^1[3-9]\d{9}$/.test(phone)){msg.className='msg err';msg.textContent='请填写11位手机号。';return}var list=load();list.unshift({type:'预约试填',at:stamp(),summary:'称呼：'+fd.get('name')+'；手机：'+phone+'；想搞清：'+((fd.get('wish')||'未写').toString().trim()||'未写')});save(list);msg.className='msg ok';msg.textContent='预约草稿在本机。';e.target.reset()};
+  document.getElementById('clear').onclick=function(){if(!confirm('清空本机记录？'))return;localStorage.removeItem(KEY);render()};
+  render();
+})();
+</script>
+
+</body>
+</html>
